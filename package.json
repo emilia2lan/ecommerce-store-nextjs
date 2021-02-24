@@ -9,8 +9,11 @@
   },
   "dependencies": {
     "@emotion/react": "^11.1.5",
+    "dotenv-safe": "^8.2.0",
     "next": "10.0.6",
+    "postgres": "^1.0.2",
     "react": "17.0.1",
-    "react-dom": "17.0.1"
+    "react-dom": "17.0.1",
+    "react-player": "^2.9.0"
   }
 }
