@@ -2,6 +2,7 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 import Layout from '../components/Layout';
 
 const productPage = css`
@@ -46,12 +47,23 @@ export default function Home(props) {
           <link rel="logo" href="/logo.ai" />
         </Head>
       </Layout>
+      {props.watches.map((watch) => {
+        return (
+          <div>
+            {watch.productName} {watch.aboutCollection} {watch.description}{' '}
+            {watch.imagesUrl} {watch.price}{' '}
+          </div>
+        );
+      })}
 
       <div css={productPage}>
         <div>
           <h1>Available products</h1>
           <section>
-            <h2>Rolex Lady-Datejust 26 mm</h2>
+            <Link href="#">
+              <a>Rolex Lady-Datejust 26 mm</a>
+            </Link>
+
             <Image
               src="/rolexDateJust.jpg"
               width={210}
@@ -153,13 +165,4 @@ export default function Home(props) {
       </div>
     </>
   );
-}
-
-export async function getServerSideProps(context) {
-  const { getWatches } = await import('../util/database.js');
-  const watches = await getWatches();
-  console.log(watches);
-  return {
-    props: {}, // will be passed to the page component as props
-  };
 }

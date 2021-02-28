@@ -43,7 +43,7 @@ export default function Layout(props) {
         <title> WatchYouGot</title>
         <link rel="logo" href="/logo.svg" />
       </Head>
-      {props.children}
+
       <header>
         <nav css={navBar}>
           <Image src="/logoWatch.svg" width={80} height={80} alt="logo" />
@@ -56,7 +56,7 @@ export default function Layout(props) {
             <a>Home</a>
           </Link>
 
-          <Link href="/products">
+          <Link href="../[allProducts].js">
             <a> Products </a>
           </Link>
 
@@ -69,6 +69,7 @@ export default function Layout(props) {
           </Link>
         </nav>
       </header>
+      {props.children}
     </>
   );
 }

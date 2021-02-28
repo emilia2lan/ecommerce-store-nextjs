@@ -1,29 +1,35 @@
 import Head from 'next/head';
-import ReactPlayer from 'react-player';
-import Layout from '../components/Layout';
+import Layout from '../components/layout';
 
-export default function Home() {
+export default function Home(props) {
   return (
     <>
       <Layout>
         <Head>
           <link rel="logo" href="/logo.svg" />
         </Head>
-      </Layout>
-      <section>
-        <ReactPlayer
-          playing
-          loop
-          url="/pocketWatch.mp4"
-          width="100vw"
-          height="100hw"
-        />
-
         <p>
-          Let me guide you to your luxury watch so your friends can always ask{' '}
-          <i>WatchYouGot</i>?{' '}
+          Let me guide you to your luxury watch so your friends can always ask
+          <i>WatchYouGot</i>?
         </p>
-      </section>
+        <div>
+          {props.allWatches.map((singleWatch) => (
+            <div>
+              <h1>{singleWatch.productName}</h1>
+              <p>{singleWatch.description}</p>
+            </div>
+          ))}
+        </div>
+      </Layout>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  const { getWatchesDataBase } = await import('../util/database.js');
+  const allWatches = await getWatchesDataBase();
+  // console.log('props from index', allWatches);
+  return {
+    props: { allWatches: allWatches }, // will be passed to the page component as props
+  };
 }
