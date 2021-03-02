@@ -1,21 +1,23 @@
+import Cookies from 'js-cookie';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Layout from '../../components/layout';
 
 export default function getSingleProduct(props) {
-  const [watchNumber, setWatchNumber] = useState(1);
-  const propsWatch = props.allWatches;
-  if (propsWatch === null) {
-    return (
-      <Layout>
-        <Head>
-          <title> Ops, your watch was Not Found</title>
-        </Head>
-        <h1>Watch Not Found</h1>
-      </Layout>
-    );
-  }
+  const [watch, setWatch] = useState(props.singleWatch);
+  const [addWatchInCart, setAddWatchInCart] = useState(1);
 
+  useEffect(() => {
+    if (!Cookies.get('watches')) {
+      Cookies.set('watches', JSON.stringify([]));
+    }
+  }, []);
+  //  Todo : be able to add a product to cookie : product object with one id, and 1 quantity, curly brackets {id:id, quantity:quantity1};
+  // 2. when I click add to cart cookie should change from [] to [{id:1, quantity:1}]
+  // 3. click again add to cart it should change the quantity of the {} inside of the array from 1 to 2, all comes from ONE function.
+  //4. if you change the page 1 or 2, should instead of changing the whole object, should add a new object next to the object already existing (comes from the SAME function).
+
+  // 5.
   return (
     <>
       <Layout>
@@ -25,27 +27,39 @@ export default function getSingleProduct(props) {
         </Head>
 
         <section>
-          {props.allWatches.id}
+          {watch.id}
           <h1>
             Name:
-            {props.allWatches.productName}
+            {watch.productName}
           </h1>
-          <div>About collection: {props.allWatches.aboutCollection}</div>
-          <div> Description: {props.allWatches.description}</div>
-          <div> Price: {props.allWatches.price}€</div>
+          <div>About collection: {watch.aboutCollection}</div>
+          <div> Description: {watch.description}</div>
+          <div> Price: {watch.price} €</div>
         </section>
 
         <button
-          onClick={() =>
-            watchNumber > 0 ? setWatchNumber(watchNumber - 1) : ''
-          }
+          onClick={() => {
+            Cookies.set(
+              'watches',
+              addCookies(props.watches.id, addWatchInCart),
+            );
+            props.setAddWatchInCart(props.watches + addWatchInCart);
+          }}
+        >
+          Add to Cart{' '}
+        </button>
+
+        <button
+          onClick={() => {
+            setAddWatchInCart(addWatchInCart - 1);
+          }}
         >
           -
         </button>
-        {watchNumber}
+
         <button
           onClick={() => {
-            setWatchNumber(watchNumber + 1);
+            setAddWatchInCart(addWatchInCart + 1);
           }}
         >
           +
@@ -56,12 +70,27 @@ export default function getSingleProduct(props) {
 }
 
 export async function getServerSideProps(context) {
-  const id = context.query.id;
   const { getWatchesDataBaseId } = await import('../../util/database.js');
-  const allWatches = await getWatchesDataBaseId(id);
-  console.log('query', context.query.id);
-  console.log('database', allWatches);
+  console.log('ctx', context.query.id);
+  const id = context.query.id;
+
+  const singleWatch = await getWatchesDataBaseId(id);
+  console.log('singleWatch', singleWatch);
+  // 1. Read the cookie the first time
+
+  // const cookiesNumClientSite = context.req.cookies.watches;
+
+  // const visitsCookieValue = cookiesNumClientSite
+  //   ? JSON.parse(cookiesNumClientSite)
+  //   : [];
+
+  // const singleWatchFromTable = visitsCookieValue.find(
+  //   (watch) => watch.id === id,
+  // );
   return {
-    props: { allWatches: allWatches || null }, // will be passed to the page component as props
+    props: {
+      // singleWatchFromTable is the id from watches Table in the Database
+      singleWatch: singleWatch || null,
+    }, // will be passed to the page component as props
   };
 }

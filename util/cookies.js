@@ -1,34 +1,30 @@
 import Cookies from 'js-cookie';
 
-export function incrementVisitsByTeamMember(visitsCookieValue, teamMemberId) {
-  // Find if the teamMemberId matches any of the array elements
+export function incrementVisitsCookies(visitsCookieValue, singleWatch) {
   const idInArray = visitsCookieValue.some(
-    (teamMemberVisits) => teamMemberVisits.teamMemberId === teamMemberId,
+    (singleWatchVisits) => singleWatchVisits.singleWatch === singleWatch,
   );
+  selected;
 
-  // If the array doesn't contain an element with the teamMemberId,
-  // then add a new array element at the end
   if (!idInArray) {
     return [
       ...visitsCookieValue,
       {
-        teamMemberId: teamMemberId,
-        visits: 1,
+        singleWatch: singleWatch,
+        watches: 1,
       },
     ];
   }
 
-  // If the array does contain an element matching the
-  // teamMemberId, increase the number of visits in that
-  // element by 1
-  return visitsCookieValue.map((teamMemberVisits) => {
-    if (teamMemberId === teamMemberVisits.teamMemberId) {
-      teamMemberVisits.visits = teamMemberVisits.visits + 1;
+  return visitsCookieValue.map((singleWatchVisits) => {
+    if (singleWatch === singleWatchVisits.singleWatch) {
+      singleWatchVisits.cookiesNumClientSite =
+        singleWatchVisits.cookiesNumClientSite + 1;
     }
-    return teamMemberVisits;
+    return singleWatchVisits;
   });
 }
 
-export function setVisitsCookieClientSide(newVisits) {
-  Cookies.set('visits', newVisits);
+export function setVisitsCookieClientSide(newCookiesNumClientSite) {
+  Cookies.set('watches', newCookiesNumClientSite);
 }

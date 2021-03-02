@@ -56,7 +56,7 @@ export default function Layout(props) {
             <a>Home</a>
           </Link>
 
-          <Link href="../[allProducts].js">
+          <Link href="/watches">
             <a> Products </a>
           </Link>
 
