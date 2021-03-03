@@ -1,19 +1,19 @@
 import Cookies from 'js-cookie';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Layout from '../../components/layout';
 
 export default function getSingleProduct(props) {
   const [watch, setWatch] = useState(props.singleWatch);
   const [addWatchInCart, setAddWatchInCart] = useState(1);
 
-  useEffect(() => {
-    if (!Cookies.get('watches')) {
-      Cookies.set('watches', JSON.stringify([]));
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!Cookies.get('watches')) {
+  //     Cookies.set('watches', JSON.stringify([]));
+  //   }
+  // }, []);
   //  Todo : be able to add a product to cookie : product object with one id, and 1 quantity, curly brackets {id:id, quantity:quantity1};
-  // 2. when I click add to cart cookie should change from [] to [{id:1, quantity:1}]
+  // 2. when I click add to cart cookie should change from [] to [{id:1, quantity:2} {id:3, quantity:5}]
   // 3. click again add to cart it should change the quantity of the {} inside of the array from 1 to 2, all comes from ONE function.
   //4. if you change the page 1 or 2, should instead of changing the whole object, should add a new object next to the object already existing (comes from the SAME function).
 
@@ -39,16 +39,40 @@ export default function getSingleProduct(props) {
 
         <button
           onClick={() => {
-            Cookies.set(
-              'watches',
-              addCookies(props.watches.id, addWatchInCart),
-            );
-            props.setAddWatchInCart(props.watches + addWatchInCart);
+            let cookieValueClientSide = Cookies.get('watches');
+            if (cookieValueClientSide) {
+              cookieValueClientSide = JSON.parse(cookieValueClientSide);
+            }
+            if (cookieValueClientSide && cookieValueClientSide.length > 0) {
+              cookieValueClientSide.map((singleWatchInCart) => {
+                if (watch.id === singleWatchInCart.id) {
+                  singleWatchInCart.quantity += addWatchInCart;
+                  return singleWatchInCart;
+                }
+              });
+
+              if (
+                cookieValueClientSide.find((element) => {
+                  return element.id === watch.id;
+                }) === undefined
+              ) {
+                cookieValueClientSide.push({
+                  id: watch.id,
+                  quantity: addWatchInCart,
+                });
+              }
+              Cookies.set('watches', cookieValueClientSide);
+            } else {
+              Cookies.set(
+                'watches',
+                JSON.stringify([{ id: watch.id, quantity: addWatchInCart }]),
+              );
+            }
           }}
         >
           Add to Cart{' '}
         </button>
-
+        <p>Number cookies: {addWatchInCart}</p>
         <button
           onClick={() => {
             setAddWatchInCart(addWatchInCart - 1);
