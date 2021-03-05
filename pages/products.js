@@ -38,7 +38,7 @@ const productPage = css`
   }
 `;
 
-export default function Home(props) {
+export default function shoppingCart(props) {
   return (
     <>
       <Layout>

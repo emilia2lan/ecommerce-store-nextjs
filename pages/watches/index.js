@@ -32,7 +32,7 @@ export default function Home(props) {
 export async function getServerSideProps() {
   const { getWatchesDataBase } = await import('../../util/database.js');
   const allWatches = await getWatchesDataBase();
-  // console.log('props from index', allWatches);
+
   return {
     props: { allWatches: allWatches }, // will be passed to the page component as props
   };

@@ -3,10 +3,6 @@ import { css } from '@emotion/react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-<link
-  href="https://fonts.googleapis.com/css?family=Chivo:300,700|Playfair+Display:700i"
-  rel="stylesheet"
-></link>;
 
 const navBar = css`
   display: flex;
