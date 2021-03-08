@@ -19,7 +19,7 @@ export default function ShoppingCart(props) {
         </Head>
       </Layout>
       <div>Shopping Cart</div>
-
+      <p>Your products are ready for checkout:</p>
       {props.productFinalToBeOrdered.map((element) => {
         return (
           <div key={element.id}>
@@ -27,15 +27,14 @@ export default function ShoppingCart(props) {
             <p>Product: {element.productName} </p>
             <p>Price: {element.price} € </p>
             <p>Quantity: {element.quantity} </p>
-            <p>
-              {' '}
-              <strong>Total: {finalPrice()} € </strong>{' '}
-            </p>
           </div>
         );
       })}
 
-      <p>Your products are ready for checkout:</p>
+      <p>
+        {' '}
+        <strong>Total: {finalPrice()} € </strong>{' '}
+      </p>
     </>
   );
 }

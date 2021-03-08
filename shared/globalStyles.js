@@ -1,8 +1,4 @@
 import { css, Global } from '@emotion/react';
-<link
-  href="https://fonts.googleapis.com/css?family=Chivo:300,700|Playfair+Display:700i"
-  rel="stylesheet"
-></link>;
 
 const myGlobalStyles = css`
   body {
