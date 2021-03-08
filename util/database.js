@@ -1,18 +1,17 @@
 import camelcaseKeys from 'camelcase-keys';
 import postgres from 'postgres';
+import setPostgresDefaultsOnHeroku from './setPostgresDefaultsHeroku';
+
 
 setPostgresDefaultsOnHeroku();
-// require('dotenv-safe').config();
+require('dotenv-safe').config();
 
 // one time connection to the dataBase watch_you_got
 function connectOneTimeToDataBase() {
   let sql;
 
   if (process.env.NODE_ENV === 'production') {
-    // Heroku needs SSL connections but
-    // has an "unauthorized" certificate
-    // https://devcenter.heroku.com/changelog-items/852
-    sql = postgres({ ssl: { rejectUnauthorized: false } });
+    sql = postgres({ ssl: true });
   } else {
     if (!globalThis.__postgresSqlClient) {
       globalThis.__postgresSqlClient = postgres();
