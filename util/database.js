@@ -1,5 +1,6 @@
 import camelcaseKeys from 'camelcase-keys';
 import postgres from 'postgres';
+
 import setPostgresDefaultsOnHeroku from './setPostgresDefaultsHeroku';
 
 setPostgresDefaultsOnHeroku();
@@ -41,6 +42,6 @@ export async function getWatchesDataBaseId(id) {
       watches
     WHERE
       id = ${id}`;
-  // console.log('id', id);
+
   return camelcaseRecords(singleWatchItem)[0];
 }
